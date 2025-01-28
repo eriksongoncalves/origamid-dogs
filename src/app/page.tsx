@@ -1,3 +1,7 @@
 export default function Home() {
-  return <h1 className="title">Hello</h1>
+  return (
+    <section className="container mainContainer">
+      <h1 className="title">DogsNext</h1>
+    </section>
+  )
 }
