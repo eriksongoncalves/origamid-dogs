@@ -2,9 +2,10 @@ import Image from "next/image"
 import Link from "next/link"
 
 import styles from "./header.module.css"
+import userGet from "@/actions/user-get"
 
 export default async function Header() {
-  const user = false
+  const { data } = await userGet()
 
   return (
     <header className={styles.header}>
@@ -13,9 +14,9 @@ export default async function Header() {
           <Image src="/assets/dogs.svg" alt="dogs" width={28} height={22} priority />
         </Link>
 
-        {user ? (
+        {data ? (
           <Link className={styles.login} href="/conta">
-            dogs
+            {data.username}
           </Link>
         ) : (
           <Link className={styles.login} href="/login">
