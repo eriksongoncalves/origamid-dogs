@@ -5,7 +5,12 @@ import apiError from "@/functions/api-error"
 
 import login from "./login"
 
-export default async function userPost(state: {}, formData: FormData) {
+type UserPostState = {
+  ok: boolean
+  error: string
+}
+
+export default async function userPost(state: UserPostState, formData: FormData) {
   const username = formData.get("username") as string | null
   const email = formData.get("email") as string | null
   const password = formData.get("password") as string | null

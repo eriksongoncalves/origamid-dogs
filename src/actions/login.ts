@@ -7,7 +7,12 @@ import apiError from "@/functions/api-error"
 
 const DEFAULT_ERROR_MESSAGE = "Usuário ou senha inválidos"
 
-export default async function login(state: {}, formData: FormData) {
+type LoginState = {
+  ok: boolean
+  error: string
+}
+
+export default async function login(state: LoginState, formData: FormData) {
   try {
     const username = formData.get("username") as string | null
     const password = formData.get("password") as string | null

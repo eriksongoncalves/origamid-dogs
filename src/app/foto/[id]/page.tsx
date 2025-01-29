@@ -1,9 +1,13 @@
-type PhotoPageProps = {
-  params: {
-    id: string
-  }
+type PageParams = {
+  id: string
 }
 
-export default function PhotoPage({ params }: PhotoPageProps) {
-  return <h1 className="title">Foto {params.id}</h1>
+type PhotoPageProps = {
+  params: Promise<PageParams>
+}
+
+export default async function PhotoPage({ params }: PhotoPageProps) {
+  const { id } = await params
+
+  return <h1 className="title">Foto {id}</h1>
 }

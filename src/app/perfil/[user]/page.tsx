@@ -1,9 +1,13 @@
-type UserPageProps = {
-  params: {
-    user: string
-  }
+type PageParams = {
+  user: string
 }
 
-export default function UserPage({ params }: UserPageProps) {
-  return <h1 className="title">User {params.user}</h1>
+type UserPageProps = {
+  params: Promise<PageParams>
+}
+
+export default async function UserPage({ params }: UserPageProps) {
+  const { user } = await params
+
+  return <h1 className="title">User {user}</h1>
 }
