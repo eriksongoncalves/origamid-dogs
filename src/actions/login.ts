@@ -32,7 +32,9 @@ export default async function login(state: LoginState, formData: FormData) {
       throw new Error(DEFAULT_ERROR_MESSAGE)
     }
 
-    const data = response.json() as any
+    const data = (await response.json()) as any
+
+    console.log(">>> data", data)
 
     const cookiesStore = await cookies()
 
