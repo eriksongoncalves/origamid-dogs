@@ -7,19 +7,23 @@ export const metadata: Metadata = {
   description: "Resete a sua senha"
 }
 
+type SearchParams = {
+  key: string
+  login: string
+}
+
 type ResetarSearchParams = {
-  searchParams: {
-    key: string
-    login: string
-  }
+  searchParams: Promise<SearchParams>
 }
 
 export default async function ResetPasswordPage({ searchParams }: ResetarSearchParams) {
+  const { key, login } = await searchParams
+
   return (
     <div className="animeLeft">
       <h1 className="title">Resete a Senha</h1>
 
-      <LoginResetarForm keyToken={searchParams.key} login={searchParams.login} />
+      <LoginResetarForm keyToken={key} login={login} />
     </div>
   )
 }

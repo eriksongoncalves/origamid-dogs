@@ -1,0 +1,46 @@
+"use server"
+
+import { cookies } from "next/headers"
+import { revalidateTag } from "next/cache"
+
+import { COMMENT_POST } from "@/functions/api"
+import apiError from "@/functions/api-error"
+
+import { Comment } from "./photo-get"
+
+type CommentPostState = {
+  ok: boolean
+  error: string
+}
+
+export default async function commentPost(state: CommentPostState, formData: FormData) {
+  const cookiesStore = await cookies()
+
+  const token = cookiesStore.get("token")?.value
+  const comment = formData.get("comment") as string | null
+  const id = formData.get("id") as string | null
+
+  try {
+    if (!token || !comment || !id) throw new Error("Preencha os dados.")
+
+    const { url } = COMMENT_POST(id)
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token
+      },
+      body: formData
+    })
+
+    if (!response.ok) throw new Error("Email ou usuário já cadastrado.")
+
+    const data = (await response.json()) as Comment
+
+    revalidateTag("comment")
+
+    return { data, ok: true, error: "" }
+  } catch (error: unknown) {
+    return apiError(error)
+  }
+}

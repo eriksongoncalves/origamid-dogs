@@ -21,8 +21,6 @@ export default function LoginPerdeuForm() {
     return isClient() ? window.location.href : ""
   }, [])
 
-  console.log(">>> url", url)
-
   return (
     <form action={action} className={styles.form}>
       <Input label="E-mail / Usuário" name="login" type="text" />
