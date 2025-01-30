@@ -1,6 +1,7 @@
 "use server"
 
 import { PHOTOS_GET } from "@/functions/api"
+import apiError from "@/functions/api-error"
 
 export type Photo = {
   id: number
@@ -20,17 +21,25 @@ type PhotosGetProps = {
   user?: string
 }
 
-export default async function photosGet({ page = 1, total = 6, user }: PhotosGetProps) {
-  const { url } = PHOTOS_GET({ page, total, user })
-
-  const response = await fetch(url, {
-    next: {
-      revalidate: 10,
-      tags: ["photos"]
+export default async function photosGet(
+  { page = 1, total = 6, user }: PhotosGetProps = {},
+  optionsFront?: RequestInit
+) {
+  try {
+    const options = optionsFront || {
+      next: { revalidate: 10, tags: ["photos"] }
     }
-  })
 
-  const data = (await response.json()) as Photo[]
+    const { url } = PHOTOS_GET({ page, total, user })
 
-  return { data, ok: true, error: "" }
+    const response = await fetch(url, options)
+
+    if (!response.ok) throw new Error("Erro ao pegar as fotos.")
+
+    const data = (await response.json()) as Photo[]
+
+    return { data, ok: true, error: "" }
+  } catch (error) {
+    return apiError(error)
+  }
 }
